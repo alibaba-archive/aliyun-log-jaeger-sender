@@ -1,6 +1,6 @@
 # aliyun-log-jaeger-sender
 ## Introduction
-These components make Jaeger compatible with [Aliyun Log Service]((https://help.aliyun.com/product/28958.html)).
+These components make Jaeger compatible with [Aliyun Log Service](https://help.aliyun.com/product/28958.html).
 
 ## Usage
 ```java
