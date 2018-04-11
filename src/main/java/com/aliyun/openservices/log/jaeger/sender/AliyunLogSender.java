@@ -47,6 +47,7 @@ public class AliyunLogSender implements Sender {
 
   @Override
   public int close() throws SenderException {
+    producer.flush();
     producer.close();
     return 0;
   }
