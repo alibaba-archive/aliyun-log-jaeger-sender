@@ -29,3 +29,8 @@ tracer = new Tracer.Builder(serviceName)
   .withSampler(new ConstSampler(true))
   .build();
 ```
+
+## Reference
+[simple-opentracing-demo](https://github.com/brucewu-fly/simple-opentracing-demo)
+
+[spring-boot-opentracing-demo](https://github.com/brucewu-fly/spring-boot-opentracing-demo)
