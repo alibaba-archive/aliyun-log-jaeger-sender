@@ -66,8 +66,9 @@ public abstract class LogItemSpanConverter {
       for (Reference reference : references) {
         JSONObject jsonRef = new JSONObject();
         jsonRef.put(Constants.REF_TYPE, reference.getType());
-        jsonRef.put(Constants.TRACE_ID, reference.getSpanContext().getTraceId());
-        jsonRef.put(Constants.SPAN_ID, reference.getSpanContext().getSpanId());
+        jsonRef
+            .put(Constants.TRACE_ID, String.format("%x", reference.getSpanContext().getTraceId()));
+        jsonRef.put(Constants.SPAN_ID, String.format("%x", reference.getSpanContext().getSpanId()));
         jsonRefs.add(jsonRef);
       }
     }
