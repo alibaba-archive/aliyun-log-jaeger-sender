@@ -42,8 +42,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
     <junit.version>4.12</junit.version>
     <protobuf.version>2.5.0</protobuf.version>
     <aliyun-log.version>0.6.16</aliyun-log.version>
