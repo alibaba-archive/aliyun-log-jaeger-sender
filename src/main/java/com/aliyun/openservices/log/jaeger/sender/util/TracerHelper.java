@@ -7,8 +7,10 @@ import io.opentracing.Scope;
 import io.opentracing.ScopeManager;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
 import io.opentracing.Tracer.SpanBuilder;
 import io.opentracing.propagation.Format;
+import java.util.Map;
 
 public class TracerHelper {
 
@@ -43,6 +45,21 @@ public class TracerHelper {
     return TracerHelper.buildSpan(operationName).startActive(finishSpanOnClose);
   }
 
+  public static Scope traceLatency(String operationName, boolean finishSpanOnClose,
+      String spanContextString) {
+    SpanContext context = com.uber.jaeger.SpanContext.contextFromString(spanContextString);
+    Tracer.SpanBuilder spanBuilder = TracerHelper.buildSpan(operationName).asChildOf(context);
+    return spanBuilder.startActive(finishSpanOnClose);
+  }
+
+  public static Scope traceLatency(String operationName, boolean finishSpanOnClose,
+      String spanContextString, Map<String, String> baggage) {
+    SpanContext context = com.uber.jaeger.SpanContext.contextFromString(spanContextString);
+    ((com.uber.jaeger.SpanContext) context).withBaggage(baggage);
+    Tracer.SpanBuilder spanBuilder = TracerHelper.buildSpan(operationName).asChildOf(context);
+    return spanBuilder.startActive(finishSpanOnClose);
+  }
+
   public static Scope asyncTraceLatency(Scope scope, boolean finishSpanOnClose) {
     return TracerHelper.scopeManager().activate(scope.span(), finishSpanOnClose);
   }
@@ -61,6 +78,16 @@ public class TracerHelper {
 
   public static <C> SpanContext extract(Format<C> format, C carrier) {
     return tracer.extract(format, carrier);
+  }
+
+  public static String getActiveSpanContextString() {
+    com.uber.jaeger.SpanContext spanContext = (com.uber.jaeger.SpanContext) TracerHelper
+        .activeSpan().context();
+    return spanContext.contextAsString();
+  }
+
+  public static Iterable<Map.Entry<String, String>> getActiveSpanBaggageItems() {
+    return TracerHelper.activeSpan().context().baggageItems();
   }
 
   public static Span activeSpan() {
