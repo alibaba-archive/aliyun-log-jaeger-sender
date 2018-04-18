@@ -41,27 +41,43 @@ public class TracerHelper {
     return TracerHelper.tracer != null;
   }
 
-  public static Scope traceLatency(String operationName, boolean finishSpanOnClose) {
-    return TracerHelper.buildSpan(operationName).startActive(finishSpanOnClose);
+  public static Scope traceLatency(String operationName) {
+    return TracerHelper.buildSpan(operationName).startActive(true);
   }
 
-  public static Scope traceLatency(String operationName, boolean finishSpanOnClose,
-      String spanContextString) {
+  public static Scope traceLatency(String operationName, String spanContextString) {
     SpanContext context = com.uber.jaeger.SpanContext.contextFromString(spanContextString);
     Tracer.SpanBuilder spanBuilder = TracerHelper.buildSpan(operationName).asChildOf(context);
-    return spanBuilder.startActive(finishSpanOnClose);
+    return spanBuilder.startActive(true);
   }
 
-  public static Scope traceLatency(String operationName, boolean finishSpanOnClose,
-      String spanContextString, Map<String, String> baggage) {
+  public static Scope traceLatency(String operationName, String spanContextString, Map<String, String> baggage) {
     SpanContext context = com.uber.jaeger.SpanContext.contextFromString(spanContextString);
     ((com.uber.jaeger.SpanContext) context).withBaggage(baggage);
     Tracer.SpanBuilder spanBuilder = TracerHelper.buildSpan(operationName).asChildOf(context);
-    return spanBuilder.startActive(finishSpanOnClose);
+    return spanBuilder.startActive(true);
   }
 
-  public static Scope asyncTraceLatency(Scope scope, boolean finishSpanOnClose) {
-    return TracerHelper.scopeManager().activate(scope.span(), finishSpanOnClose);
+  public static Scope asyncTraceLatency(String operationName) {
+    return TracerHelper.buildSpan(operationName).startActive(false);
+  }
+
+  public static Scope asyncTraceLatency(String operationName, String spanContextString) {
+    SpanContext context = com.uber.jaeger.SpanContext.contextFromString(spanContextString);
+    Tracer.SpanBuilder spanBuilder = TracerHelper.buildSpan(operationName).asChildOf(context);
+    return spanBuilder.startActive(false);
+  }
+
+  public static Scope asyncTraceLatency(String operationName, String spanContextString,
+      Map<String, String> baggage) {
+    SpanContext context = com.uber.jaeger.SpanContext.contextFromString(spanContextString);
+    ((com.uber.jaeger.SpanContext) context).withBaggage(baggage);
+    Tracer.SpanBuilder spanBuilder = TracerHelper.buildSpan(operationName).asChildOf(context);
+    return spanBuilder.startActive(false);
+  }
+
+  public static Scope restoreAsyncTraceLatency(Scope scope) {
+    return TracerHelper.scopeManager().activate(scope.span(), true);
   }
 
   public static ScopeManager scopeManager() {
