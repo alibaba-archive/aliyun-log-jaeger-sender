@@ -24,6 +24,7 @@ public class AliyunLogSender implements Sender {
 
   private AliyunLogSender(Builder builder) {
     this.builder = builder;
+    builder.producerConfig.userAgent = Constants.USER_AGENT;
     producer = new LogProducer(builder.producerConfig);
     producer.setProjectConfig(builder.projectConfig);
   }

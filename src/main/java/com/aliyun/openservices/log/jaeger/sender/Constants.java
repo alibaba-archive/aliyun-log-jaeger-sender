@@ -31,4 +31,6 @@ public class Constants {
   public static final String EVENT = "event";
 
   public static final String REF_TYPE = "refType";
+
+  public static final String USER_AGENT = "aliyun-log-jaeger-sender";
 }
