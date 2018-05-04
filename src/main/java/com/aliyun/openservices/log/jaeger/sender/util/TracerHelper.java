@@ -10,6 +10,7 @@ import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.opentracing.Tracer.SpanBuilder;
 import io.opentracing.propagation.Format;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TracerHelper {
@@ -51,7 +52,8 @@ public class TracerHelper {
     return spanBuilder.startActive(true);
   }
 
-  public static Scope traceLatency(String operationName, String spanContextString, Map<String, String> baggage) {
+  public static Scope traceLatency(String operationName, String spanContextString,
+      Map<String, String> baggage) {
     SpanContext context = com.uber.jaeger.SpanContext.contextFromString(spanContextString);
     ((com.uber.jaeger.SpanContext) context).withBaggage(baggage);
     Tracer.SpanBuilder spanBuilder = TracerHelper.buildSpan(operationName).asChildOf(context);
@@ -78,6 +80,24 @@ public class TracerHelper {
 
   public static Scope restoreAsyncTraceLatency(Scope scope) {
     return TracerHelper.scopeManager().activate(scope.span(), true);
+  }
+
+  public static void logThrowable(Span span, Throwable t) {
+    Map<String, String> fields = new HashMap<String, String>();
+    fields.put("event", "error");
+    fields.put("error.kind", t.getClass().getName());
+    fields.put("message", t.getMessage());
+    fields.put("stack", ThrowableTransformer.INSTANCE.convert2String(t));
+    span.log(fields);
+  }
+
+  public static void logThrowable(Span span, long timestampMicroseconds, Throwable t) {
+    Map<String, String> fields = new HashMap<String, String>();
+    fields.put("event", "error");
+    fields.put("error.kind", t.getClass().getName());
+    fields.put("message", t.getMessage());
+    fields.put("stack", ThrowableTransformer.INSTANCE.convert2String(t));
+    span.log(fields);
   }
 
   public static ScopeManager scopeManager() {
