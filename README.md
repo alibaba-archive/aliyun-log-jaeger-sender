@@ -15,6 +15,11 @@ These components make Jaeger compatible with [Aliyun Log Service](https://help.a
       <artifactId>aliyun-log-jaeger-sender</artifactId>
       <version>0.0.6</version>
 </dependency>
+<dependency>
+    <groupId>com.uber.jaeger</groupId>
+    <artifactId>jaeger-core</artifactId>
+    <version>0.26.0</version>
+</dependency>
 ```
 
 ### Build a Tracer
