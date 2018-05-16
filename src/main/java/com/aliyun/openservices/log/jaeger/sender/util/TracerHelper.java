@@ -1,7 +1,10 @@
 package com.aliyun.openservices.log.jaeger.sender.util;
 
 import com.aliyun.openservices.log.jaeger.sender.AliyunLogSender;
+import com.aliyun.openservices.log.jaeger.sender.AliyunLogSenderCallback;
+import com.uber.jaeger.reporters.NoopReporter;
 import com.uber.jaeger.reporters.RemoteReporter;
+import com.uber.jaeger.reporters.Reporter;
 import com.uber.jaeger.samplers.Sampler;
 import io.opentracing.Scope;
 import io.opentracing.ScopeManager;
@@ -12,18 +15,33 @@ import io.opentracing.Tracer.SpanBuilder;
 import io.opentracing.propagation.Format;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TracerHelper {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AliyunLogSenderCallback.class);
 
   private static volatile com.uber.jaeger.Tracer tracer;
 
   public static synchronized void buildTracer(String serviceName, AliyunLogSender aliyunLogSender,
       Sampler sampler) {
-    RemoteReporter remoteReporter = new RemoteReporter.Builder()
-        .withSender(aliyunLogSender)
-        .build();
+    if (aliyunLogSender == null) {
+      LOGGER.warn(
+          "The parameter aliyunLogSender is null, use NoopReporter instead of RemoteReporter.");
+      buildTracer(serviceName, new NoopReporter(), sampler);
+    } else {
+      RemoteReporter remoteReporter = new RemoteReporter.Builder()
+          .withSender(aliyunLogSender)
+          .build();
+      buildTracer(serviceName, remoteReporter, sampler);
+    }
+  }
+
+  public static synchronized void buildTracer(String serviceName, Reporter reporter,
+      Sampler sampler) {
     tracer = new com.uber.jaeger.Tracer.Builder(serviceName)
-        .withReporter(remoteReporter)
+        .withReporter(reporter)
         .withSampler(sampler)
         .build();
   }
