@@ -10,7 +10,7 @@
 
   <groupId>com.aliyun.openservices</groupId>
   <artifactId>aliyun-log-jaeger-sender</artifactId>
-  <version>0.0.7</version>
+  <version>0.0.8-SNAPSHOT</version>
 
   <name>Aliyun LOG Jaeger Sender</name>
   <url>http://www.aliyun.com</url>
