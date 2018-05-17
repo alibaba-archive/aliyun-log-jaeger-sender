@@ -13,7 +13,7 @@ These components make Jaeger compatible with [Aliyun Log Service](https://help.a
 <dependency>
       <groupId>com.aliyun.openservices</groupId>
       <artifactId>aliyun-log-jaeger-sender</artifactId>
-      <version>0.0.7</version>
+      <version>0.0.8</version>
 </dependency>
 <dependency>
     <groupId>com.uber.jaeger</groupId>
