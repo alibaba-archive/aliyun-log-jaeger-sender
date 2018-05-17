@@ -40,10 +40,12 @@ public class TracerHelper {
 
   public static synchronized void buildTracer(String serviceName, Reporter reporter,
       Sampler sampler) {
-    tracer = new com.uber.jaeger.Tracer.Builder(serviceName)
-        .withReporter(reporter)
-        .withSampler(sampler)
-        .build();
+    if (tracer == null) {
+      tracer = new com.uber.jaeger.Tracer.Builder(serviceName)
+          .withReporter(reporter)
+          .withSampler(sampler)
+          .build();
+    }
   }
 
   public static synchronized void registerTracer(final com.uber.jaeger.Tracer tracer) {
@@ -52,6 +54,13 @@ public class TracerHelper {
     }
     if (isTracerRegistered() && !TracerHelper.tracer.equals(tracer)) {
       throw new IllegalStateException("There is already a current Tracer registered.");
+    }
+    TracerHelper.tracer = tracer;
+  }
+
+  public static synchronized void updateTracer(final com.uber.jaeger.Tracer tracer) {
+    if (tracer == null) {
+      throw new NullPointerException("Cannot register Tracer <null>.");
     }
     TracerHelper.tracer = tracer;
   }
