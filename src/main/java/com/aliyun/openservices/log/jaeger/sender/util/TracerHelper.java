@@ -58,6 +58,28 @@ public class TracerHelper {
     TracerHelper.tracer = tracer;
   }
 
+  public static synchronized void updateTracer(String serviceName, AliyunLogSender aliyunLogSender,
+      Sampler sampler) {
+    if (aliyunLogSender == null) {
+      LOGGER.warn(
+          "The parameter aliyunLogSender is null, use NoopReporter instead of RemoteReporter.");
+      updateTracer(serviceName, new NoopReporter(), sampler);
+    } else {
+      RemoteReporter remoteReporter = new RemoteReporter.Builder()
+          .withSender(aliyunLogSender)
+          .build();
+      updateTracer(serviceName, remoteReporter, sampler);
+    }
+  }
+
+  public static synchronized void updateTracer(String serviceName, Reporter reporter,
+      Sampler sampler) {
+    updateTracer(new com.uber.jaeger.Tracer.Builder(serviceName)
+        .withReporter(reporter)
+        .withSampler(sampler)
+        .build());
+  }
+
   public static synchronized void updateTracer(final com.uber.jaeger.Tracer tracer) {
     if (tracer == null) {
       throw new NullPointerException("Cannot register Tracer <null>.");
