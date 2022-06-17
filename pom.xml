@@ -48,7 +48,7 @@
     <protobuf.version>2.5.0</protobuf.version>
     <aliyun-log.version>0.6.16</aliyun-log.version>
     <log-loghub-producer.version>0.1.11</log-loghub-producer.version>
-    <fastjson.version>1.2.47</fastjson.version>
+    <fastjson.version>1.2.83</fastjson.version>
     <jaeger-core.version>0.26.0</jaeger-core.version>
   </properties>
 
