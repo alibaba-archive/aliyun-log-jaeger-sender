@@ -45,7 +45,7 @@
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
     <junit.version>4.12</junit.version>
-    <protobuf.version>2.5.0</protobuf.version>
+    <protobuf.version>3.16.3</protobuf.version>
     <aliyun-log.version>0.6.16</aliyun-log.version>
     <log-loghub-producer.version>0.1.11</log-loghub-producer.version>
     <fastjson.version>1.2.47</fastjson.version>
